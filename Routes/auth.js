@@ -1,8 +1,8 @@
 const User = require("../models/User");
-
 const router = require("express").Router();
+const jwt = require("jsonwebtoken");
 
-//REGISTER
+//?  REGISTER...
 router.post("/register", async (req, res) => {
   const newUser = new User({
     username: req.body.username,
@@ -16,6 +16,36 @@ router.post("/register", async (req, res) => {
   } catch (error) {
     res.status(500).json(error);
   }
+});
+
+//? LOGINNNN...
+
+router.post("/login", async (req, res) => {
+  try {
+    const user = await User.findOne({
+      username: req.body.username,
+    });
+    !user && res.status(401).json("Invalid User");
+
+    user.password !== req.body.password &&
+      res.status(401).json("Wrong Password");
+
+    // console.log(user);
+    const accessToken = jwt.sign(
+      {
+        id: user._id,
+        isAdmin: user.isAdmin,
+      },
+      "zahid10xy",
+      {
+        expiresIn: "1d",
+      }
+    );
+
+    const { password, ...others } = user._doc;
+
+    res.status(200).json({ ...others, accessToken });
+  } catch (error) {}
 });
 
 module.exports = router;
