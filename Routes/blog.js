@@ -1,4 +1,3 @@
-
 const Blog = require("../models/Blog");
 const { verifyToken, verifyTokenAndAuthorization } = require("./verifyToken");
 const router = require("express").Router();
@@ -63,7 +62,7 @@ router.put("/:id", verifyTokenAndAuthorization, async (req, res) => {
 });
 
 //? DELETE
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", verifyTokenAndAuthorization, async (req, res) => {
   try {
     await Blog.findByIdAndDelete(req.params.id);
     res.status(200).json("Blog deleted!");
