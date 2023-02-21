@@ -19,8 +19,6 @@ router.post("/register", async (req, res) => {
   }
 });
 
-
-
 //?  LOGINNNN...
 router.post("/login", async (req, res) => {
   try {
@@ -33,8 +31,6 @@ router.post("/login", async (req, res) => {
       user.password,
       "zahid10xy"
     ).toString(CryptoJS.enc.Utf8);
-
-    console.log(OGpassword);
 
     OGpassword !== req.body.password && res.status(401).json("Wrong Password");
 
@@ -54,7 +50,7 @@ router.post("/login", async (req, res) => {
 
     res.status(200).json({ ...others, accessToken });
   } catch (error) {
-    console.log(error)
+    res.status(500).json(error);
   }
 });
 
